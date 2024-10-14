@@ -1,3 +1,5 @@
+import 'package:chat_app/services/services.dart';
+import 'package:chat_app/helper/display_messages.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
+  final authServices = AuthServices();
 
   @override
   void initState() {
@@ -31,7 +34,22 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void register() {}
+  void register(BuildContext context) async {
+    if (_passwordController.text == _confirmPasswordController.text) {
+      try {
+        await authServices.registerWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+      } catch (e) {
+        if (context.mounted) {
+          displayMessages(context, e.toString());
+        }
+      }
+    } else {
+      displayMessages(context, 'Password don\'t match!');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const Spacer(flex: 2),
             CustomButon(
-              onTap: register,
+              onTap: () => register(context),
               text: 'Register',
             ),
             const Spacer(flex: 2),

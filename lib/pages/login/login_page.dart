@@ -1,3 +1,5 @@
+import 'package:chat_app/services/services.dart';
+import 'package:chat_app/helper/display_messages.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  final authServices = AuthServices();
 
   @override
   void initState() {
@@ -28,7 +31,18 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void login() {}
+  void login(BuildContext context) async {
+    try {
+      await authServices.loginWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } catch (e) {
+      if (context.mounted) {
+        displayMessages(context, e.toString());
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const Spacer(flex: 2),
             CustomButon(
-              onTap: login,
+              onTap: () => login(context),
               text: 'Login',
             ),
             const Spacer(flex: 2),

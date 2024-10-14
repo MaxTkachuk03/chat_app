@@ -1,4 +1,4 @@
-import 'package:chat_app/auth/auth.dart';
+import 'package:chat_app/services/services.dart';
 import 'package:chat_app/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class ChatApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ligthMode,
-      home: const LoginOrRegister(),
+      home: const AuthPage(),
     );
   }
 }
