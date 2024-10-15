@@ -18,10 +18,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      drawerScrimColor: Theme.of(context).colorScheme.primary,
       drawer: const MyDrawer(),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.transparent,
         title: const Text("Home"),
       ),
       body: StreamBuilder(
@@ -40,7 +41,6 @@ class _HomePageState extends State<HomePage> {
             }
             return ListView(
               children: snapshot.data!.map<Widget>((userData) {
-                print(userData['email']);
                 if (userData['email'] !=
                     _authServices.getCurrentUser()?.email) {
                   return UserTile(
@@ -49,7 +49,8 @@ class _HomePageState extends State<HomePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ChatPage(
-                                    email: userData['email'],
+                                    recieverEmail: userData['email'],
+                                    recieverId: userData['uid'],
                                   )));
                     },
                     text: userData['email'],
