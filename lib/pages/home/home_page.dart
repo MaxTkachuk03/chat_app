@@ -2,7 +2,6 @@ import 'package:chat_app/pages/pages.dart';
 import 'package:chat_app/services/services.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:nil/nil.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,7 +22,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.primary,
         backgroundColor: Colors.transparent,
-        title: const Text("Home"),
+        title: const Text("H O M E"),
       ),
       body: StreamBuilder(
           stream: _chatServices.getUsersStream(),
@@ -41,22 +40,18 @@ class _HomePageState extends State<HomePage> {
             }
             return ListView(
               children: snapshot.data!.map<Widget>((userData) {
-                if (userData['email'] !=
-                    _authServices.getCurrentUser()?.email) {
-                  return UserTile(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChatPage(
-                                    recieverEmail: userData['email'],
-                                    recieverId: userData['uid'],
-                                  )));
-                    },
-                    text: userData['email'],
-                  );
-                }
-                return nil;
+                return UserTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChatPage(
+                                  recieverEmail: userData['email'],
+                                  recieverId: userData['uid'],
+                                )));
+                  },
+                  text: userData['email'],
+                );
               }).toList(),
             );
           }),

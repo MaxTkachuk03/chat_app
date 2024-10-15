@@ -68,7 +68,6 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     final senderId = _authServices.getCurrentUser()!.uid;
-    final height = MediaQuery.sizeOf(context).height;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -120,6 +119,8 @@ class _ChatPageState extends State<ChatPage> {
                                 ChatBubble(
                                   message: data['message'],
                                   isCurrentUser: isCurrentUser,
+                                  messageId: doc.id,
+                                  userId: data['senderId'],
                                 ),
                               ],
                             ));
@@ -127,24 +128,27 @@ class _ChatPageState extends State<ChatPage> {
                     );
                   }),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: MyTextfield(
-                    focusNode: myFocusNode,
-                    hintText: 'Say something...',
-                    obscureText: false,
-                    controller: _messageController,
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: MyTextfield(
+                      focusNode: myFocusNode,
+                      hintText: 'Say something...',
+                      obscureText: false,
+                      controller: _messageController,
+                    ),
                   ),
-                ),
-                IconButton.filled(
-                    iconSize: 30,
-                    onPressed: sendMessage,
-                    icon: const Icon(
-                      Icons.arrow_upward_rounded,
-                    )),
-              ],
+                  IconButton.filled(
+                      iconSize: 30,
+                      onPressed: sendMessage,
+                      icon: const Icon(
+                        Icons.arrow_upward_rounded,
+                      )),
+                ],
+              ),
             ),
           ],
         ),
