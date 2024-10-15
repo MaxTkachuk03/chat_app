@@ -1,3 +1,4 @@
+import 'package:chat_app/services/notifications/notification_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -23,6 +24,8 @@ class AuthServices {
         'email': email,
       });
 
+      NotificationServices().setupTokenListeners();
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
@@ -37,6 +40,13 @@ class AuthServices {
         password: password,
       );
 
+      _firestore.collection("Users").doc(userCredential.user?.uid).set({
+        'uid': userCredential.user?.uid,
+        'email': email,
+      });
+
+      NotificationServices().setupTokenListeners();
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
@@ -44,6 +54,12 @@ class AuthServices {
   }
 
   Future<void> signOut() async {
+    String? userId = _auth.currentUser?.uid;
+
+    if (userId != null) {
+      NotificationServices().clearTokenOnLogout(userId);
+    }
+
     await _auth.signOut();
   }
 
