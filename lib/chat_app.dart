@@ -8,9 +8,11 @@ class ChatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: context.watch<ThemeProvider>().themeData,
-      home: const AuthPage(),
-    );
+        debugShowCheckedModeBanner: false,
+        theme: context.watch<ThemeProvider>().themeData,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const AuthPage(),
+        });
   }
 }

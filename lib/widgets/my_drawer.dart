@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
-  void logout() async {
+  void logout(BuildContext context) async {
     final authServices = AuthServices();
     await authServices.signOut();
+    if (context.mounted) {
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    }
   }
 
   @override
@@ -60,7 +63,7 @@ class MyDrawer extends StatelessWidget {
               ),
               title: const Text("L O G O U T"),
               onTap: () {
-                logout();
+                logout(context);
               },
             ),
           ),

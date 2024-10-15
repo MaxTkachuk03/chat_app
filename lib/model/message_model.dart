@@ -3,26 +3,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageModel {
   MessageModel({
-    required this.recieverId,
+    required this.receiverId,
     required this.senderId,
     required this.senderEmail,
     required this.message,
     required this.timestamp,
+    this.isRead = false,
   });
 
-  final String recieverId;
+  final String receiverId;
   final String senderId;
   final String senderEmail;
   final String message;
   final Timestamp timestamp;
+  final bool isRead;
 
   Map<String, dynamic> toMap() {
     return {
-      'recieverId': recieverId,
+      'recieverId': receiverId,
       'senderId': senderId,
       'senderEmail': senderEmail,
       'message': message,
       'timestamp': timestamp,
+      'isRead': isRead,
     };
   }
 }

@@ -76,6 +76,14 @@ class _ChatPageState extends State<ChatPage> {
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.primary,
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+            onPressed: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+                (route) => false),
+            icon: const Icon(
+              Icons.arrow_back_ios,
+            )),
       ),
       body: SafeArea(
         maintainBottomViewPadding: true,
@@ -84,7 +92,7 @@ class _ChatPageState extends State<ChatPage> {
             Expanded(
               child: StreamBuilder(
                   stream: _chatServices.getMessage(
-                      userId: senderId, otherUserId: widget.recieverId),
+                      senderId: senderId, receiverId: widget.recieverId),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(

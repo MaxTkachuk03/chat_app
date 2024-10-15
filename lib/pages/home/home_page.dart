@@ -2,6 +2,7 @@ import 'package:chat_app/pages/pages.dart';
 import 'package:chat_app/services/services.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:nil/nil.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text("H O M E"),
       ),
       body: StreamBuilder(
-          stream: _chatServices.getUsersStream(),
+          stream: _chatServices.getUsersStreamExcludingBlocked(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -40,18 +41,28 @@ class _HomePageState extends State<HomePage> {
             }
             return ListView(
               children: snapshot.data!.map<Widget>((userData) {
-                return UserTile(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChatPage(
-                                  recieverEmail: userData['email'],
-                                  recieverId: userData['uid'],
-                                )));
-                  },
-                  text: userData['email'],
-                );
+                if (_authServices.getCurrentUser()!.email !=
+                    userData['email']) {
+                  return UserTile(
+                    onTap: () async {
+                      await _chatServices.markMessages(
+                          receiverId: userData['uid']);
+
+                      if (context.mounted) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                      recieverEmail: userData['email'],
+                                      recieverId: userData['uid'],
+                                    )));
+                      }
+                    },
+                    text: userData['email'],
+                    unreadMessageCount: userData['unreadCount'],
+                  );
+                }
+                return nil;
               }).toList(),
             );
           }),
